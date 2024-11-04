@@ -3,10 +3,10 @@ export function renderMainPage(app, navigate) {
         <div class="main-container">
             <h1>PONG</h1>
             <div class="options">
-                <div class="option" id="single-player">Single Player</div>
-                <div class="option" id="online-match">Online Match</div>
-                <div class="option" id="tournament">Tournament</div>
-                <div class="option" id="not-a-game">Totally Not A Game</div>
+                <button class="option" id="single-player">Single Player</button>
+                <button class="option" id="online-match">Online Match</button>
+                <button class="option" id="tournament">Tournament</button>
+                <button class="option" id="not-a-game">Totally Not A Game</button>
             </div>
         </div>
     `;
