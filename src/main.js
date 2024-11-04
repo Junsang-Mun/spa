@@ -1,44 +1,40 @@
-import * as bootstrap from 'bootstrap';
+import { renderLoginPage } from './pages/loginPage.js';
+import { renderMainPage } from './pages/mainPage.js';
+import { renderOtherPage } from './pages/otherPage.js';
+import { renderErrorPage } from './pages/errorPage.js';
 
-const content = document.getElementById('content');
+const app = document.getElementById('app');
 
-function loadPage(page) {
+function navigate(page) {
+    history.pushState({ page }, "", `/${page}`);
+    renderPage(page);
+}
+
+function renderPage(page) {
     switch (page) {
-        case 'home':
-            content.innerHTML = `
-                <h1>환영합니다!</h1>
-                <p>여기는 홈 페이지입니다.</p>
-                <button type="button" class="btn btn-primary">Base class</button>
-            `;
+        case 'main':
+            renderMainPage(app, navigate);
             break;
-        case 'about':
-            content.innerHTML = `
-                <h1>소개</h1>
-                <p>이 웹사이트는 Vite와 Bootstrap을 사용하여 만들어진 SPA입니다.</p>
-            `;
+        case 'login':
+            renderLoginPage(app, navigate);
             break;
-        case 'contact':
-            content.innerHTML = `
-                <h1>연락처</h1>
-                <p>이메일: example@example.com</p>
-            `;
+        case 'single-player':
+        case 'online-match':
+        case 'tournament':
+        case 'not-a-game':
+            renderOtherPage(app, page.replace('-', ' '), navigate);
             break;
         default:
-            content.innerHTML = `<h1>404 Not Found</h1>`;
+            renderErrorPage(app, navigate);
             break;
     }
 }
-function handleNavigation(event) {
-    const route = event.target.getAttribute('data-route');
-    if (route) {
-        history.pushState({ route }, "", `#${route}`);  // Change URL without reloading
-        loadPage(route);
-    }
-}
 
-loadPage('home');
+// popstate 이벤트로 뒤로가기/앞으로가기를 지원합니다.
+window.addEventListener('popstate', (event) => {
+    renderPage(event.state ? event.state.page : 'login');
+});
 
-// 네비게이션 클릭 이벤트 설정
-document.getElementById('home').addEventListener('click', () => loadPage('home'));
-document.getElementById('about').addEventListener('click', () => loadPage('about'));
-document.getElementById('contact').addEventListener('click', () => loadPage('contact'));
+// 초기 페이지 로드
+const initialPage = window.location.pathname.replace('/', '') || 'login';
+renderPage(initialPage);

@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'DOSGothic';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSGothic.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: 'DOSGothic', sans-serif;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+#app {
+    text-align: center;
+}
+.login-button, .back-button {
+    padding: 0.5em 2em;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #444;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1em;
+}
+.login-button:hover, .back-button:hover {
+    background-color: #666;
+}
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 50px;
+}
+.option {
+    padding: 1em 2em;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #222;
+    border: 2px solid #fff;
+    cursor: pointer;
+    text-align: center;
+}
+.option:hover {
+    background-color: #555;
+}
+.page-container {
+    text-align: center;
+}
