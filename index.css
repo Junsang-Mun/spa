@@ -7,6 +7,7 @@
 
 * {
     font-family: 'DOSGothic', sans-serif;
+    font-size: 110%;
 }
 
 body, html {
@@ -18,49 +19,53 @@ body, html {
     height: 100vh;
     background-color: #000;
     color: #fff;
-    font-family: Arial, sans-serif;
 }
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 3em;
+    color: #fff;
+    text-align: center;
+    z-index: 1000;
+}
+
 #app {
     text-align: center;
 }
-.login-button, .back-button {
-    padding: 0.5em 2em;
-    font-size: 1em;
-    font-weight: bold;
-    color: #fff;
-    background-color: #444;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 1em;
-}
-.login-button:hover, .back-button:hover {
-    background-color: #666;
-}
-.main-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.options {
+
+.grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 50px;
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10em;
 }
-.option {
-    padding: 1em 2em;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #fff;
-    background-color: #222;
-    border: 2px solid #fff;
+
+.grid-item-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 0.6em solid #fff;
+  font-size: 1.5em;
+  padding: 1em;
+}
+
+.grid-item-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 0.6em solid #fff;
+  font-size: 1.5em;
+  padding: 1em;
+}
+
+.grid-item-left:hover, .grid-item-right:hover {
+    background-color: darkgray;
     cursor: pointer;
-    text-align: center;
 }
-.option:hover {
-    background-color: #555;
-}
+
 .page-container {
     text-align: center;
 }

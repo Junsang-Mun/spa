@@ -3,6 +3,8 @@ import { renderMainPage } from './pages/mainPage.js';
 import { renderOtherPage } from './pages/otherPage.js';
 import { renderErrorPage } from './pages/errorPage.js';
 
+import { renderHeader } from './modules/header.js';
+
 const app = document.getElementById('app');
 
 function navigate(page) {
@@ -11,6 +13,7 @@ function navigate(page) {
 }
 
 function renderPage(page) {
+    renderHeader(document.getElementById('header'));
     switch (page) {
         case 'main':
             renderMainPage(app, navigate);
