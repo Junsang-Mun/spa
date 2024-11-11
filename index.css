@@ -1,46 +1,47 @@
 @font-face {
-    font-family: 'DOSGothic';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSGothic.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "DOSGothic";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSGothic.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 
 * {
-    font-family: 'DOSGothic', sans-serif;
-    font-size: 110%;
+  font-family: "DOSGothic", sans-serif;
+  font-size: 110%;
 }
 
-body, html {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #000;
-    color: #fff;
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
 }
 
 #header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 3em;
-    color: #fff;
-    text-align: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 3em;
+  color: #fff;
+  text-align: center;
+  z-index: 1000;
 }
 
 #app {
-    text-align: center;
+  text-align: center;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10em;
 }
 
 .grid-item-left {
@@ -61,11 +62,12 @@ body, html {
   padding: 1em;
 }
 
-.grid-item-left:hover, .grid-item-right:hover {
-    background-color: darkgray;
-    cursor: pointer;
+.grid-item-left:hover,
+.grid-item-right:hover {
+  background-color: darkgray;
+  cursor: pointer;
 }
 
 .page-container {
-    text-align: center;
+  text-align: center;
 }

@@ -8,6 +8,7 @@ const routes = {
     'main': () => import('./pages/main.js').then(module => module.render(app, navigate)),
     'game': {
         'offline': {
+            'select': () => import('./pages/game/offline/select.js').then(module => module.render(app, navigate)),
             'single': () => import('./pages/game/offline/single.js').then(module => module.render(app, navigate)),
         },
         'online': {

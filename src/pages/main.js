@@ -8,8 +8,8 @@ export function render(app, navigate) {
         </div>
     `;
 
-  document.getElementById('online-match').addEventListener('click', () => navigate('game/offline/single'));
+  document.getElementById('online-match').addEventListener('click', () => navigate('game/online/select'));
   document.getElementById('not-a-game').addEventListener('click', () => navigate('not-a-game'));
-  document.getElementById('offline-match').addEventListener('click', () => navigate('offline-match'));
+  document.getElementById('offline-match').addEventListener('click', () => navigate('game/offline/select'));
   document.getElementById('your-score').addEventListener('click', () => navigate('your-score'));
 }
