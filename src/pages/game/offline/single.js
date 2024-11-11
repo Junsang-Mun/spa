@@ -1,4 +1,4 @@
-export function renderOtherPage(app, pageName, navigate) {
+export function render(app, navigate) {
     app.innerHTML = `
         <canvas id="pongCanvas" width="800px" height="400px" style="border: 1px solid #FFF">
             Your browser does not support this game.

@@ -1,4 +1,4 @@
-export function renderLoginPage(app, navigate) {
+export function render(app, navigate) {
     app.innerHTML = `
         <h1>PONG</h1>
         <button class="button btn-primary" id="loginButton">Login with 42</button>

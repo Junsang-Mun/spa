@@ -1,43 +1,61 @@
-import { renderLoginPage } from './pages/loginPage.js';
-import { renderMainPage } from './pages/mainPage.js';
-import { renderOtherPage } from './pages/otherPage.js';
-import { renderErrorPage } from './pages/errorPage.js';
-
 import { renderHeader } from './modules/header.js';
 
 const app = document.getElementById('app');
 
-function navigate(page) {
-    history.pushState({ page }, "", `/${page}`);
-    renderPage(page);
+// Routing map for multi-depth routes
+const routes = {
+    'login': () => import('./pages/login.js').then(module => module.render(app, navigate)),
+    'main': () => import('./pages/main.js').then(module => module.render(app, navigate)),
+    'game': {
+        'offline': {
+            'single': () => import('./pages/game/offline/single.js').then(module => module.render(app, navigate)),
+        },
+        'online': {
+            // 'signle': () => import('./pages/game/online/single.js').then(module => module.render),
+        },
+    },
+};
+
+// Default error page
+const errorPage = () => import('./pages/error.js').then(module => module.render(app, navigate));
+
+function navigate(path) {
+    history.pushState({ path }, "", `/${path}`);
+    renderPage(path);
 }
 
-function renderPage(page) {
+async function resolveRoute(path) {
+    const segments = path.split('/');
+    let currentRoute = routes;
+
+    for (const segment of segments) {
+        if (typeof currentRoute === 'function') {
+            return currentRoute; // Match function.
+        }
+        currentRoute = currentRoute[segment]; // Drill further.
+    }
+
+    console.log(`Route not found for path: ${path}, using errorPage.`);
+    return typeof currentRoute === 'function' ? currentRoute : errorPage;
+}
+
+async function renderPage(path) {
     renderHeader(document.getElementById('header'));
-    switch (page) {
-        case 'main':
-            renderMainPage(app, navigate);
-            break;
-        case 'login':
-            renderLoginPage(app, navigate);
-            break;
-        case 'single-player':
-        case 'online-match':
-        case 'tournament':
-        case 'not-a-game':
-            renderOtherPage(app, page.replace('-', ' '), navigate);
-            break;
-        default:
-            renderErrorPage(app, navigate);
-            break;
+
+    try {
+        const renderer = await resolveRoute(path);
+        console.log(`Rendering path: ${path}`);
+        renderer(app, navigate);
+    } catch (error) {
+        console.error(`Error rendering page for path "${path}":`, error);
     }
 }
 
-// popstate 이벤트로 뒤로가기/앞으로가기를 지원합니다.
+// Handle popstate for back/forward navigation
 window.addEventListener('popstate', (event) => {
-    renderPage(event.state ? event.state.page : 'login');
+    renderPage(event.state ? event.state.path : 'login');
 });
 
-// 초기 페이지 로드
-const initialPage = window.location.pathname.replace('/', '') || 'login';
-renderPage(initialPage);
+// Initial page load
+const initialPath = window.location.pathname.replace('/', '') || 'login';
+renderPage(initialPath);
