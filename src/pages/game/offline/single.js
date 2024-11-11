@@ -21,6 +21,10 @@ export function render(app, navigate) {
         right.textContent = Number(right.textContent) + 1;
     }
 
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+
     /* Pong Game Play */
     const canvas = document.getElementById('pongCanvas');
     const ctx = canvas.getContext('2d');
@@ -64,14 +68,13 @@ export function render(app, navigate) {
         ball.x += speed.ball.x;
         ball.y += speed.ball.y;
         if (ball.y < ballRadius || ball.y > canvas.height - ballRadius) {
-            speed.ball.y = -speed.ball.y;
+            speed.ball.y = -speed.ball.y - 1;
+            console.log(speed.ball.y);
         }
         if (ball.x <= paddleWidth) {
             if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
-                speed.ball.x = -speed.ball.x;
-                const edge = Math.abs(ball.y - (leftPaddle.y + paddleHeight / 2)) / 100 + 1
-                speed.ball.x *= edge;
-                speed.ball.y *= edge;
+                speed.ball.x = -speed.ball.x + 1;
+                console.log(speed.ball.x);
             }
             else {
                 rightWin();
@@ -79,10 +82,7 @@ export function render(app, navigate) {
             }
         } else if (ball.x >= canvas.width - paddleWidth) {
             if (ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
-                speed.ball.x = -speed.ball.x;
-                const edge = Math.abs(ball.y - (rightPaddle.y + paddleHeight / 2)) / 100 + 1
-                speed.ball.x *= edge;
-                speed.ball.y *= edge;
+                speed.ball.x = -speed.ball.x + 1;
             }
             else {
                 leftWin();
