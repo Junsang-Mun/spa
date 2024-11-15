@@ -35,7 +35,7 @@ export function render(app, navigate) {
 
     const ballRadius = 10;
     const ball = { x: canvas.width / 2, y: canvas.height / 2 };
-    const speed = { paddle: 10, ball: { x: 5, y: 5 } };
+    const speed = { paddle: 4, ball: { x: 5, y: 5 } };
 
     let leftPaddleDirection, rightPaddleDirection;
 
@@ -95,7 +95,7 @@ export function render(app, navigate) {
         leftPaddle.x = 0; leftPaddle.y = (canvas.height - paddleHeight) / 2;
         rightPaddle.x = canvas.width - paddleWidth; rightPaddle.y = (canvas.height - paddleHeight) / 2;
         ball.x = canvas.width / 2; ball.y = canvas.height / 2;
-        speed.paddle = 10; speed.ball.x = 5; speed.ball.y = 5;
+        speed.paddle = 4; speed.ball.x = 5; speed.ball.y = 5;
     }
 
     window.addEventListener('keydown', (e) => {
