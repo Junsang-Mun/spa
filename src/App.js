@@ -8,11 +8,12 @@ const routes = {
     'main': () => import('./pages/main.js').then(module => module.render(app, navigate)),
     'game': {
         'offline': {
-            'select': () => import('./pages/game/offline/select.js').then(module => module.render(app, navigate)),
-            'single': () => import('./pages/game/offline/single.js').then(module => module.render(app, navigate)),
+            'ai': () => import('./pages/game/offline/ai.js').then(module => module.render(app, navigate)),
+            '2p': () => import('./pages/game/offline/2p.js').then(module => module.render(app, navigate)),
         },
         'online': {
-            // 'signle': () => import('./pages/game/online/single.js').then(module => module.render),
+            '2p': () => import('./pages/game/online/2p.js').then(module => module.render(app, navigate)),
+            '4p': () => import('./pages/game/online/4p.js').then(module => module.render(app, navigate)),
         },
     },
 };

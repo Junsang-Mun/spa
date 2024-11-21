@@ -41,7 +41,8 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(2, 1fr);
-  gap: 10em;
+  column-gap: 3em;
+  row-gap: 5em;
 }
 
 .grid-item-left {
