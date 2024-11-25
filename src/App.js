@@ -1,6 +1,8 @@
 import { renderHeader } from './modules/header.js';
+import { loadLocale } from './locale/localeManager.js';
 
 const app = document.getElementById('app');
+const userLocale = 'ja-JP';
 
 // Routing map for multi-depth routes
 const routes = {
@@ -42,6 +44,7 @@ async function resolveRoute(path) {
 }
 
 async function renderPage(path) {
+    await loadLocale(userLocale);
     renderHeader(document.getElementById('header'));
 
     try {
