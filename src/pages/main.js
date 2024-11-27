@@ -1,6 +1,6 @@
 import { t } from '/src/locale/localeManager.js';
 
-export function render(app, navigate, locale = 'ja-JP') {
+export function render(app, navigate, locale = 'en-US') {
     app.innerHTML = `
         <div class="grid">
             <div class="grid-item-left" id="online-2p">${t('online1v1', '1v1 Online', locale)}</div>
