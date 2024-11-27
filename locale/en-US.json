@@ -2,5 +2,7 @@
 	"online1v1": "1vs1 Online",
 	"online2v2": "2vs2 Online",
 	"local1v1": "1vs1 Local",
-	"localAI": "AI Battle"
+	"localAI": "AI Battle",
+	"error": "Your game ran into a problem and needs to restart as soon as we're finished collecting some error info.",
+	"errorButton": "Got it, take me to the home screen"
 }
