@@ -2,7 +2,7 @@ import { renderHeader } from './modules/header.js';
 import { loadLocale } from './locale/localeManager.js';
 
 const app = document.getElementById('app');
-let userLocale = 'ko-KR';
+let userLocale = 'ja-JP';
 
 // Routing map for multi-depth routes
 const routes = {

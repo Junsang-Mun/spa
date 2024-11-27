@@ -1,6 +1,6 @@
 import { t } from '/src/locale/localeManager.js';
 
-export function render(app, navigate, locale = 'ko-KR') {
+export function render(app, navigate, locale = 'ja-JP') {
     app.innerHTML = `
     <div style="background-color: #0078D7; padding: 2rem">
         <h1 style="text-align: left">:(</h1>
