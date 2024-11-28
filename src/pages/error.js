@@ -1,4 +1,4 @@
-import { t } from '/src/locale/localeManager.js';
+import { t } from '/src/modules/locale/localeManager.js';
 
 export function render(app, navigate, locale = 'ja-JP') {
     app.innerHTML = `

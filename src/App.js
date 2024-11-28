@@ -1,8 +1,26 @@
-import { renderHeader } from './modules/header.js';
-import { loadLocale } from './locale/localeManager.js';
+import { renderHeader } from './pages/header/header.js';
+import { loadLocale, setupLocaleListener } from './modules/locale/localeManager.js';
 
 const app = document.getElementById('app');
-let userLocale = 'ja-JP';
+
+setupLocaleListener();
+
+window.addEventListener('localStorageChange', async (event) => {
+    if (event.detail.key === 'locale') {
+        console.log('Locale changed, re-rendering page...');
+        const currentPath = window.location.pathname.replace('/', '') || 'login'; // Get current path
+        await renderPage(currentPath); // Re-render the page dynamically
+    }
+});
+
+window.addEventListener('storage', async (event) => {
+    if (event.key === 'locale') {
+        console.log('Locale changed across tabs, re-rendering page...');
+        const currentPath = window.location.pathname.replace('/', '') || 'login';
+        await renderPage(currentPath);
+    }
+});
+
 
 // Routing map for multi-depth routes
 const routes = {
@@ -44,7 +62,7 @@ async function resolveRoute(path) {
 }
 
 async function renderPage(path) {
-    await loadLocale(userLocale);
+    await loadLocale();
     renderHeader(document.getElementById('header'));
 
     try {

@@ -4,5 +4,7 @@
 	"local1v1": "ローカル1vs1",
 	"localAI": "ローカルAI",
 	"error":"ゲームに問題が発生したため、 再起動する必要があります。エラー情報を収集しています。 自動的に再起動します。",
-	"errorButton": "再起動"
+	"errorButton": "再起動",
+	"scoreboard": "スコアボード",
+	"totallynotagame": "決してゲームではありません！"
 }

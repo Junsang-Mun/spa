@@ -1,14 +1,14 @@
-import { t } from '/src/locale/localeManager.js';
+import { t } from '/src/modules/locale/localeManager.js';
 
-export function render(app, navigate, locale = 'en-US') {
+export function render(app, navigate) {
     app.innerHTML = `
         <div class="grid">
-            <div class="grid-item-left" id="online-2p">${t('online1v1', '1v1 Online', locale)}</div>
-            <div class="grid-item-right" id="online-4p">${t('online2v2', '4P Online', locale)}</div>
-            <div class="grid-item-left" id="offline-2p">${t('local1v1', 'Local Duel', locale)}</div>
-            <div class="grid-item-right" id="offline-ai">${t('localAI', 'AI Battle', locale)}</div>
-            <div class="grid-item-left" id="scoreboard">${t('scoreboard', 'Scoreboard', locale)}</div>
-            <div class="grid-item-right" id="totallynotagame">${t('not_a_game', 'Totally Not a Game', locale)}</div>
+            <div class="grid-item-left" id="online-2p">${t('online1v1', '1v1 Online')}</div>
+            <div class="grid-item-right" id="online-4p">${t('online2v2', '4P Online')}</div>
+            <div class="grid-item-left" id="offline-2p">${t('local1v1', 'Local Duel')}</div>
+            <div class="grid-item-right" id="offline-ai">${t('localAI', 'AI Battle')}</div>
+            <div class="grid-item-left" id="scoreboard">${t('scoreboard', 'Scoreboard')}</div>
+            <div class="grid-item-right" id="totallynotagame">${t('totallynotagame', 'Totally Not a Game')}</div>
         </div>
     `;
 
