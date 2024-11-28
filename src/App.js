@@ -36,6 +36,11 @@ const routes = {
             '4p': () => import('./pages/game/online/4p.js').then(module => module.render(app, navigate)),
         },
     },
+    'log': {
+        'main': () => import('./pages/log/main.js').then(module => module.render(app, navigate)),
+        'tournament': () => import('./pages/log/tournament.js').then(module => module.render(app, navigate)),
+        'dual': () => import('./pages/log/dual.js').then(module => module.render(app, navigate)),
+    },
 };
 
 // Default error page

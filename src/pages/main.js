@@ -16,6 +16,6 @@ export function render(app, navigate) {
     document.getElementById('online-4p').addEventListener('click', () => navigate('game/online/4p'));
     document.getElementById('offline-2p').addEventListener('click', () => navigate('game/offline/2p'));
     document.getElementById('offline-ai').addEventListener('click', () => navigate('game/offline/ai'));
-    document.getElementById('scoreboard').addEventListener('click', () => navigate('scoreboard'));
+    document.getElementById('scoreboard').addEventListener('click', () => navigate('log/main'));
     document.getElementById('totallynotagame').addEventListener('click', () => navigate('totallynotagame'));
 }
