@@ -21,3 +21,24 @@ npm run dev
 4. connect to the dev server
 
 [https://localhost:5173](https://localhost:5173)
+
+## How to use i18n manager (aka localeManager)
+
+1. import the `t` from localeManager. Absolute path is given below:
+```js
+import { t } from '/src/modules/locale/localeManager.js';
+```
+
+2. the `t` will do everything for us:
+```js
+t('key', 'fallback paragraph')
+```
+
+3. the parameter `key` should be stored in the locale file (stored under `/locale/{locale}.json`). If not, the fallback paragraph will be displayed.
+
+4. sample usage
+```javascript
+app.innerHTML = `<p style="text-align: left">${t('error', 'sorry')}</p>`
+```
+
+5. if the `t` has third parameter(mostly `locale`), just simply delete it. It is just legacy.
