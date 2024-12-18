@@ -40,6 +40,7 @@ const routes = {
         'main': () => import('./pages/log/main.js').then(module => module.render(app, navigate)),
         'tournament': () => import('./pages/log/tournament.js').then(module => module.render(app, navigate)),
         'dual': () => import('./pages/log/dual.js').then(module => module.render(app, navigate)),
+        'rps': () => import('./pages/log/rps.js').then(module => module.render(app, navigate)),
     },
 };
 
