@@ -9,16 +9,44 @@ export function render(app, navigate) {
           <h1 id="right-score">0</h1>
       </div>
   `;
+
+  function reflectBall(ball, paddle) {
+    const hitPoint = (ball.y - (paddle.y + paddleHeight / 2)) / (paddleHeight / 2);
+    const maxBounceAngle = Math.PI / 4;  // 최대 반사 각도 45도
+    const bounceAngle = hitPoint * maxBounceAngle;
+
+    const speedMagnitude = Math.sqrt(speed.ball.x ** 2 + speed.ball.y ** 2);
+    speed.ball.x = speedMagnitude * Math.cos(bounceAngle) * (ball.x < canvas.width / 2 ? 1 : -1);
+    speed.ball.y = speedMagnitude * Math.sin(bounceAngle);
+  }
+
+  function increaseBallSpeed() {
+    const increaseFactor = 1.1;
+    speed.ball.x *= increaseFactor;
+    speed.ball.y *= increaseFactor;
+  }
+
+  function finish(winner) {
+    alert(`${winner} wins!`);
+    navigate('main');
+  }
+
   /* Scoreborad */
   const left = document.getElementById('left-score');
   const right = document.getElementById('right-score');
 
   function leftWin() {
       left.textContent = Number(left.textContent) + 1;
+      if (Number(left.textContent) === 5) {
+          finish('Left');
+      }
   }
 
   function rightWin() {
       right.textContent = Number(right.textContent) + 1;
+      if (Number(right.textContent) === 5) {
+          finish('Right');
+      }
   }
 
   function getRandomInt(max) {
@@ -35,7 +63,7 @@ export function render(app, navigate) {
 
   const ballRadius = 10;
   const ball = { x: canvas.width / 2, y: canvas.height / 2 };
-  const speed = { paddle: 4, ball: { x: 5, y: 5 } };
+  const speed = { paddle: 8, ball: { x: 5, y: 5 } };
 
   let leftPaddleDirection, rightPaddleDirection;
 
@@ -68,21 +96,22 @@ export function render(app, navigate) {
       ball.x += speed.ball.x;
       ball.y += speed.ball.y;
       if (ball.y < ballRadius || ball.y > canvas.height - ballRadius) {
-          speed.ball.y = -speed.ball.y - 1;
+          speed.ball.y = -speed.ball.y;
           console.log(speed.ball.y);
       }
-      if (ball.x <= paddleWidth) {
-          if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
-              speed.ball.x = -speed.ball.x + 1;
-              console.log(speed.ball.x);
+      if (ball.x <= paddleWidth + ballRadius) {
+        if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
+            reflectBall(ball, leftPaddle);
+            increaseBallSpeed();
           }
           else {
               rightWin();
               resetGame();
           }
-      } else if (ball.x >= canvas.width - paddleWidth) {
+      } else if (ball.x >= canvas.width - paddleWidth - ballRadius) {
           if (ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
-              speed.ball.x = -speed.ball.x + 1;
+            reflectBall(ball, rightPaddle);
+            increaseBallSpeed();
           }
           else {
               leftWin();
@@ -92,10 +121,15 @@ export function render(app, navigate) {
   }
 
   function resetGame() {
-      leftPaddle.x = 0; leftPaddle.y = (canvas.height - paddleHeight) / 2;
-      rightPaddle.x = canvas.width - paddleWidth; rightPaddle.y = (canvas.height - paddleHeight) / 2;
-      ball.x = canvas.width / 2; ball.y = canvas.height / 2;
-      speed.paddle = 4; speed.ball.x = 5; speed.ball.y = 5;
+    leftPaddle.y = (canvas.height - paddleHeight) / 2;
+    rightPaddle.y = (canvas.height - paddleHeight) / 2;
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height / 2;
+
+    const initialDirectionX = Math.random() < 0.5 ? 1 : -1;
+    const initialDirectionY = Math.random() < 0.5 ? 1 : -1;
+    speed.ball.x = 5 * initialDirectionX;
+    speed.ball.y = (Math.random() * 4 + 2) * initialDirectionY;  // 2 ~ 6
   }
 
   window.addEventListener('keydown', (e) => {

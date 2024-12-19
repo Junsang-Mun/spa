@@ -1,141 +1,190 @@
-import imgUrl from '/assets/meme.jpg';
-
 export function render(app, navigate) {
   app.innerHTML = `
-      <canvas id="pongCanvas" style="height: 80vh; background-color:#222"></canvas>
+      <canvas id="pongCanvas" width="800px" height="400px" style="border: 1px solid #FFF">
+          Your browser does not support this game.
+      </canvas>
+      <div class="score-box" style="display: flex; align-items: center; justify-content: center;">
+          <h1 id="left-score">0</h1>
+          <h1>:</h1>
+          <h1 id="right-score">0</h1>
+      </div>
   `;
-  const canvas = document.getElementById("pongCanvas");
-const ctx = canvas.getContext("2d");
 
-// Set canvas dimensions
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+  function reflectBall(ball, paddle) {
+    const hitPoint = (ball.y - (paddle.y + paddleHeight / 2)) / (paddleHeight / 2);
+    const maxBounceAngle = Math.PI / 4;  // 최대 반사 각도 45도
+    const bounceAngle = hitPoint * maxBounceAngle;
 
-// Ball properties
-const ball = {
-  x: canvas.width / 2,
-  y: canvas.height / 2,
-  radius: 10,
-  speedX: 10,
-  speedY: 10,
-  color: "white",
-};
-
-// Paddle properties
-const paddle = {
-  width: 10,
-  height: 100,
-  x: 20,
-  y: canvas.height / 2 - 50,
-  speed: 35,
-  dy: 0,
-  color: "white",
-};
-
-// AI paddle
-const aiPaddle = {
-  ...paddle,
-  x: canvas.width - 30,
-  y: canvas.height / 2 - 50,
-};
-
-// Draw ball
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fillStyle = ball.color;
-  ctx.fill();
-  ctx.closePath();
-}
-
-// Draw paddle
-function drawPaddle(p) {
-  ctx.fillStyle = p.color;
-  ctx.fillRect(p.x, p.y, p.width, p.height);
-}
-
-// Move paddles
-function movePaddles() {
-  // Player paddle
-  paddle.y += paddle.dy;
-
-  // Prevent paddle from leaving the screen
-  if (paddle.y < 0) paddle.y = 0;
-  if (paddle.y + paddle.height > canvas.height)
-    paddle.y = canvas.height - paddle.height;
-
-  // AI paddle moves towards the ball
-  if (ball.y < aiPaddle.y) aiPaddle.y -= paddle.speed;
-  if (ball.y > aiPaddle.y + aiPaddle.height) aiPaddle.y += paddle.speed;
-
-  // Prevent AI paddle from leaving the screen
-  if (aiPaddle.y < 0) aiPaddle.y = 0;
-  if (aiPaddle.y + aiPaddle.height > canvas.height)
-    aiPaddle.y = canvas.height - aiPaddle.height;
-}
-
-// Move ball
-function moveBall() {
-  ball.x += ball.speedX;
-  ball.y += ball.speedY;
-
-  // Bounce off top and bottom walls
-  if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
-    ball.speedY *= -1;
+    const speedMagnitude = Math.sqrt(speed.ball.x ** 2 + speed.ball.y ** 2);
+    speed.ball.x = speedMagnitude * Math.cos(bounceAngle) * (ball.x < canvas.width / 2 ? 1 : -1);
+    speed.ball.y = speedMagnitude * Math.sin(bounceAngle);
   }
 
-  // Bounce off paddles
-  if (
-    ball.x - ball.radius < paddle.x + paddle.width &&
-    ball.y > paddle.y &&
-    ball.y < paddle.y + paddle.height
-  ) {
-    ball.speedX *= -1;
+  function increaseBallSpeed() {
+    const increaseFactor = 1.1;
+    speed.ball.x *= increaseFactor;
+    speed.ball.y *= increaseFactor;
   }
 
-  if (
-    ball.x + ball.radius > aiPaddle.x &&
-    ball.y > aiPaddle.y &&
-    ball.y < aiPaddle.y + aiPaddle.height
-  ) {
-    ball.speedX *= -1;
+  function finish(winner) {
+    alert(`${winner} wins!`);
+    navigate('main');
   }
 
-  // Reset ball if it goes off screen
-  if (ball.x < 0 || ball.x > canvas.width) {
+  /* Scoreborad */
+  const left = document.getElementById('left-score');
+  const right = document.getElementById('right-score');
+
+  function leftWin() {
+      left.textContent = Number(left.textContent) + 1;
+      if (Number(left.textContent) === 5) {
+          finish('Left');
+      }
+  }
+
+  function rightWin() {
+      right.textContent = Number(right.textContent) + 1;
+      if (Number(right.textContent) === 5) {
+          finish('Right');
+      }
+  }
+
+  function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+  }
+
+  /* Pong Game Play */
+  const canvas = document.getElementById('pongCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const paddleWidth = 10, paddleHeight = 100;
+  const leftPaddle = { x: 0, y: (canvas.height - paddleHeight) / 2 };
+  const rightPaddle = { x: canvas.width - paddleWidth, y: (canvas.height - paddleHeight) / 2 };
+
+  const ballRadius = 10;
+  const ball = { x: canvas.width / 2, y: canvas.height / 2 };
+  const speed = { paddle: 8, ball: { x: 5, y: 5 } };
+
+  let leftPaddleDirection, rightPaddleDirection;
+
+  function drawPaddle(paddle) {
+      ctx.fillStyle = '#FFF';
+      ctx.fillRect(paddle.x, paddle.y, paddleWidth, paddleHeight);
+  }
+
+  function drawBall(ball) {
+      ctx.fillStyle = '#FFF'
+      ctx.beginPath();
+      ctx.ellipse(ball.x, ball.y, ballRadius, ballRadius, 0, 0, Math.PI * 2);
+      ctx.fill();
+  }
+
+  function movePaddle(left, right) {
+    if (left === 'up' && leftPaddle.y > 0) {
+        leftPaddle.y -= speed.paddle;
+    } else if (left === 'down' && leftPaddle.y < canvas.height - paddleHeight) {
+        leftPaddle.y += speed.paddle;
+    }
+
+    // AI Logic for the right paddle
+    const aiSpeed = speed.paddle - 2;  // Slightly slower than the ball
+    if (ball.y < rightPaddle.y + paddleHeight / 2 && rightPaddle.y > 0) {
+        rightPaddle.y -= aiSpeed;  // Move up if the ball is above the paddle center
+    } else if (ball.y > rightPaddle.y + paddleHeight / 2 && rightPaddle.y < canvas.height - paddleHeight) {
+        rightPaddle.y += aiSpeed;  // Move down if the ball is below the paddle center
+    }
+  }
+
+  function moveBall() {
+      ball.x += speed.ball.x;
+      ball.y += speed.ball.y;
+      if (ball.y < ballRadius || ball.y > canvas.height - ballRadius) {
+          speed.ball.y = -speed.ball.y;
+          console.log(speed.ball.y);
+      }
+      if (ball.x <= paddleWidth + ballRadius) {
+        if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
+            reflectBall(ball, leftPaddle);
+            increaseBallSpeed();
+          }
+          else {
+              rightWin();
+              resetGame();
+          }
+      } else if (ball.x >= canvas.width - paddleWidth - ballRadius) {
+          if (ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
+            reflectBall(ball, rightPaddle);
+            increaseBallSpeed();
+          }
+          else {
+              leftWin();
+              resetGame();
+          }
+      }
+  }
+
+  function resetGame() {
+    leftPaddle.y = (canvas.height - paddleHeight) / 2;
+    rightPaddle.y = (canvas.height - paddleHeight) / 2;
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
-    ball.speedX = ball.speedX > 0 ? -4 : 4; // Change direction
+
+    const initialDirectionX = Math.random() < 0.5 ? 1 : -1;
+    const initialDirectionY = Math.random() < 0.5 ? 1 : -1;
+    speed.ball.x = 5 * initialDirectionX;
+    speed.ball.y = (Math.random() * 4 + 2) * initialDirectionY;  // 2 ~ 6
   }
-}
 
-// Key handlers
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowUp") paddle.dy = -paddle.speed;
-  if (e.key === "ArrowDown") paddle.dy = paddle.speed;
-});
+  window.addEventListener('keydown', (e) => {
+      switch (e.key) {
+          case 'ArrowUp':
+              rightPaddleDirection = 'up';
+              break;
+          case 'ArrowDown':
+              rightPaddleDirection = 'down';
+              break;
+          case 'w':
+              leftPaddleDirection = 'up';
+              break;
+          case 's':
+              leftPaddleDirection = 'down';
+              break;
+          default:
+              rightPaddleDirection = null;
+              break;
+      }
+  });
 
-document.addEventListener("keyup", (e) => {
-  if (e.key === "ArrowUp" || e.key === "ArrowDown") paddle.dy = 0;
-});
+  window.addEventListener('keyup', (e) => {
+      switch (e.key) {
+          case 'ArrowUp':
+              rightPaddleDirection = null;
+              break;
+          case 'ArrowDown':
+              rightPaddleDirection = null;
+              break;
+          case 'w':
+              leftPaddleDirection = null;
+              break;
+          case 's':
+              leftPaddleDirection = null;
+              break;
+          default:
+              leftPaddleDirection = null;
+              rightPaddleDirection = null;
+              break;
+      }
+  })
 
-// Game loop
-function gameLoop() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBall(ball);
+      drawPaddle(rightPaddle);
+      drawPaddle(leftPaddle);
+      movePaddle(leftPaddleDirection, rightPaddleDirection);
+      moveBall();
+      requestAnimationFrame(draw);
+  }
 
-  // Draw elements
-  drawBall();
-  drawPaddle(paddle);
-  drawPaddle(aiPaddle);
-
-  // Update game state
-  moveBall();
-  movePaddles();
-
-  requestAnimationFrame(gameLoop);
-}
-
-// Start the game
-gameLoop();
-
+  draw();
 }
