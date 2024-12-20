@@ -102,7 +102,7 @@ export function render(app, navigate) {
           speed.ball.y = -speed.ball.y;
           console.log(speed.ball.y);
       }
-      if (ball.x <= paddleWidth + ballRadius) {
+      if (ball.x <= ballRadius) {
         if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
             reflectBall(ball, leftPaddle);
             increaseBallSpeed();
@@ -111,7 +111,7 @@ export function render(app, navigate) {
               rightWin();
               resetGame();
           }
-      } else if (ball.x >= canvas.width - paddleWidth - ballRadius) {
+      } else if (ball.x >= canvas.width - ballRadius) {
           if (ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
             reflectBall(ball, rightPaddle);
             increaseBallSpeed();
