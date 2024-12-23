@@ -1,6 +1,7 @@
 let animationFrameId;
 let keydownHandler;
 let keyupHandler;
+let paused = false;
 
 export function render(app, navigate) {
   app.innerHTML = `
@@ -35,9 +36,13 @@ export function render(app, navigate) {
     drawBall(ball);
     drawPaddle(leftPaddle);
     drawPaddle(rightPaddle);
-    movePaddle(leftPaddleDirection, rightPaddleDirection);
-    moveBall();
-    animationFrameId = requestAnimationFrame(draw);
+  
+    if (!paused) {
+      movePaddle(leftPaddleDirection, rightPaddleDirection);
+      moveBall();
+    }
+  
+    animationFrameId = requestAnimationFrame(draw); // Always keep the loop running
   }
 
   function drawBall(ball) {
@@ -62,42 +67,69 @@ export function render(app, navigate) {
   function moveBall() {
     ball.x += speed.ball.x;
     ball.y += speed.ball.y;
-
-    if (ball.y < ballRadius || ball.y > canvas.height - ballRadius) speed.ball.y = -speed.ball.y;
-
-    if (ball.x <= ballRadius) {
+  
+    // Ball hits the top or bottom wall
+    if (ball.y < ballRadius) {
+      ball.y = ballRadius; // Correct position
+      speed.ball.y = -speed.ball.y; // Reverse direction
+    } else if (ball.y > canvas.height - ballRadius) {
+      ball.y = canvas.height - ballRadius; // Correct position
+      speed.ball.y = -speed.ball.y; // Reverse direction
+    }
+  
+    // Ball hits the left wall
+    if (ball.x - ballRadius <= 0) {
       if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
         increaseSpeed();
-        reflectBall(ball, leftPaddle);
+        reflectBall(ball, leftPaddle, true);
       } else {
         rightScore.textContent = +rightScore.textContent + 1;
-        resetGame();
+        pauseGame(); // Pause the game
         checkWin("Right");
       }
     }
-
-    if (ball.x >= canvas.width - ballRadius) {
+  
+    // Ball hits the right wall
+    if (ball.x + ballRadius >= canvas.width) {
       if (ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
         increaseSpeed();
-        reflectBall(ball, rightPaddle);
+        reflectBall(ball, rightPaddle, false);
       } else {
         leftScore.textContent = +leftScore.textContent + 1;
-        resetGame();
+        pauseGame(); // Pause the game
         checkWin("Left");
       }
     }
   }
 
-  function reflectBall(ball, paddle) {
+  function pauseGame() {
+    paused = true; // Set paused state
+    window.addEventListener('keydown', resumeGameOnce); // Wait for a keypress to resume
+  }
+  
+  function resumeGameOnce(e) {
+    if (e.key === ' ') {
+      paused = false; // Clear paused state
+      window.removeEventListener('keydown', resumeGameOnce); // Remove the resume listener
+      resetGame(); // Reset the game for the next round
+    }
+  }
+
+
+  function reflectBall(ball, paddle, isLeftPaddle) {
+    const paddleEdgeX = isLeftPaddle ? paddle.x + paddleWidth : paddle.x;
     const hitPoint = (ball.y - (paddle.y + paddleHeight / 2)) / (paddleHeight / 2);
     const maxBounceAngle = Math.PI / 4; 
     const bounceAngle = hitPoint * maxBounceAngle;
     const speedMagnitude = Math.sqrt(speed.ball.x ** 2 + speed.ball.y ** 2);
 
-    speed.ball.x = speedMagnitude * Math.cos(bounceAngle) * (ball.x < canvas.width / 2 ? 1 : -1);
+    speed.ball.x = speedMagnitude * Math.cos(bounceAngle) * (isLeftPaddle ? 1 : -1);
     speed.ball.y = speedMagnitude * Math.sin(bounceAngle);
+
+    // Adjust ball position to ensure it reflects from the edge
+    ball.x = paddleEdgeX + (isLeftPaddle ? ballRadius : -ballRadius);
   }
-  
+
   function increaseSpeed() {
     const speedIncrement = 1.1;
     speed.ball.x *= speedIncrement;
