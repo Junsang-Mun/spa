@@ -42,3 +42,10 @@ app.innerHTML = `<p style="text-align: left">${t('error', 'sorry')}</p>`
 ```
 
 5. if the `t` has third parameter(mostly `locale`), just simply delete it. It is just legacy.
+
+## Docker
+
+```bash
+docker build -t 0x1f-fe .
+docker run 8080:80 0x1f-fe
+```
