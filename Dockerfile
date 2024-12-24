@@ -13,6 +13,7 @@ RUN npm run build
 FROM nginx:alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
+COPY /locale /usr/share/nginx/html/locale
 
 EXPOSE 80
 
