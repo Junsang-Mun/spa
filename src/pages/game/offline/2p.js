@@ -5,14 +5,14 @@ let paused = false;
 
 export function render(app, navigate) {
   app.innerHTML = `
-      <canvas id="pongCanvas" width="800px" height="400px" style="border: 1px solid #FFF">
-          Your browser does not support this game.
-      </canvas>
-      <div class="score-box" style="display: flex; align-items: center; justify-content: center;">
-          <h1 id="left-score">0</h1>
-          <h1>:</h1>
-          <h1 id="right-score">0</h1>
-      </div>
+  <canvas id="pongCanvas" width="800px" height="400px" style="border: 1px solid #FFF">
+  Your browser does not support this game.
+  </canvas>
+  <div class="score-box" style="display: flex; align-items: center; justify-content: center;">
+  <h1 id="left-score">0</h1>
+  <h1>:</h1>
+  <h1 id="right-score">0</h1>
+  </div>
   `;
 
   /* Initialize Game Variables */
@@ -36,12 +36,12 @@ export function render(app, navigate) {
     drawBall(ball);
     drawPaddle(leftPaddle);
     drawPaddle(rightPaddle);
-  
+
     if (!paused) {
       movePaddle(leftPaddleDirection, rightPaddleDirection);
       moveBall();
     }
-  
+
     animationFrameId = requestAnimationFrame(draw); // Always keep the loop running
   }
 
@@ -67,7 +67,7 @@ export function render(app, navigate) {
   function moveBall() {
     ball.x += speed.ball.x;
     ball.y += speed.ball.y;
-  
+
     // Ball hits the top or bottom wall
     if (ball.y < ballRadius) {
       ball.y = ballRadius; // Correct position
@@ -76,7 +76,7 @@ export function render(app, navigate) {
       ball.y = canvas.height - ballRadius; // Correct position
       speed.ball.y = -speed.ball.y; // Reverse direction
     }
-  
+
     // Ball hits the left wall
     if (ball.x - ballRadius <= 0) {
       if (ball.y >= leftPaddle.y && ball.y <= leftPaddle.y + paddleHeight) {
@@ -88,7 +88,7 @@ export function render(app, navigate) {
         checkWin("Right");
       }
     }
-  
+
     // Ball hits the right wall
     if (ball.x + ballRadius >= canvas.width) {
       if (ball.y >= rightPaddle.y && ball.y <= rightPaddle.y + paddleHeight) {
@@ -106,7 +106,7 @@ export function render(app, navigate) {
     paused = true; // Set paused state
     window.addEventListener('keydown', resumeGameOnce); // Wait for a keypress to resume
   }
-  
+
   function resumeGameOnce(e) {
     if (e.key === ' ') {
       paused = false; // Clear paused state
@@ -114,7 +114,6 @@ export function render(app, navigate) {
       resetGame(); // Reset the game for the next round
     }
   }
-
 
   function reflectBall(ball, paddle, isLeftPaddle) {
     const paddleEdgeX = isLeftPaddle ? paddle.x + paddleWidth : paddle.x;
@@ -141,6 +140,7 @@ export function render(app, navigate) {
       alert(`${winner} wins!`);
       navigate('main');
       cleanup(); // Stop the game
+      location.reload();
     }
   }
 
